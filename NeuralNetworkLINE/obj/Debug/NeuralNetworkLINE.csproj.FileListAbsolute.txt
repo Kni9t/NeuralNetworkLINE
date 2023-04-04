@@ -1,0 +1,16 @@
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\bin\Debug\NeuralNetworkLINE.exe.config
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\bin\Debug\NeuralNetworkLINE.exe
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\bin\Debug\NeuralNetworkLINE.pdb
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NeuralNetworkLINE.csproj.AssemblyReference.cache
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NeuralNetworkLINE.csproj.SuggestedBindingRedirects.cache
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\MainWindow.g.cs
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\App.g.cs
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NeuralNetworkLINE_MarkupCompile.cache
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NeuralNetworkLINE_MarkupCompile.lref
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\MainWindow.baml
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NeuralNetworkLINE.g.resources
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NeuralNetworkLINE.Properties.Resources.resources
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NeuralNetworkLINE.csproj.GenerateResource.cache
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NeuralNetworkLINE.csproj.CoreCompileInputs.cache
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NeuralNetworkLINE.exe
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NeuralNetworkLINE.pdb
