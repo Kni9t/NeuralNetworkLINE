@@ -9,7 +9,7 @@
     <Grid>
         <Grid HorizontalAlignment="Left" Height="130" Margin="267,9,0,0" VerticalAlignment="Top" Width="109">
             <Border BorderBrush="Black" BorderThickness="2"/>
-            <Button Content="Анализ" HorizontalAlignment="Center" Height="31" Margin="0,65,0,0" VerticalAlignment="Top" Width="85" FontSize="14" FontWeight="Normal"/>
+            <Button Click="Button_Click" Content="Анализ" HorizontalAlignment="Center" Height="31" Margin="0,65,0,0" VerticalAlignment="Top" Width="85" FontSize="14" FontWeight="Normal"/>
             <Label Content="Ожидание" Name="BaseLabel" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" FontSize="14" FontWeight="Bold"/>
         </Grid>
         <Canvas Name="BaseCanvas" HorizontalAlignment="Left" Height="200" Margin="10,10,0,0" VerticalAlignment="Top" Width="200" MouseDown="CanvasMouseDown"/>

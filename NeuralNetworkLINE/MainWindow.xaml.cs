@@ -27,5 +27,41 @@ namespace NeuralNetworkLINE
         {
             //if (e.ChangedButton == MouseButton.Left) BaseLabel.Content = C1.test();
         }
+        public void Up(int b)
+        {
+            b++;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            string Result = "";
+            byte[][] buf = new byte[4][];
+            for (int i = 0; i < buf.Length; i++) buf[i] = new byte[4];
+
+            int Col = 0, Str = 0;
+
+            foreach (Rectangle R in BaseCanvas.Children)
+            {
+                if (R.Fill == Brushes.White) buf[Str][Col] = 0;
+                else buf[Str][Col] = 1;
+
+                if (Str == 3)
+                {
+                    Col++;
+                    Str = 0;
+                }
+                else Str++;
+            }
+
+            for (int i = 0; i < buf.Length; i++)
+            {
+                for (int j = 0; j < buf[i].Length; j++)
+                {
+                    Result += (buf[i][j] + " ");
+                }
+                Result += "\n";
+            }
+            MessageBox.Show(Result);
+        }
     }
 }
