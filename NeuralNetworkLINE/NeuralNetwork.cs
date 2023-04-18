@@ -8,7 +8,7 @@ namespace NeuralNetworkLINE
 {
     public class NeuralNetwork
     {
-        float[,] W1, W2; // Первое число обозначает выходной номер, второе входной
+        float[,] W1, W2; // ?? Первое число обозначает выходной номер, второе входной
         float[] InPut, Hidden, OutPut;
 
         public NeuralNetwork(float[] InPut, float[] OutPut)
@@ -24,7 +24,7 @@ namespace NeuralNetworkLINE
                 for (int j = 0; j < InPut.Length; j++) 
                     W1[i,j] = 0.5f;
 
-            W1 = new float[OutPut.Length, Hidden.Length];
+            W2 = new float[OutPut.Length, Hidden.Length];
 
             for (int i = 0; i < OutPut.Length; i++)
                 for (int j = 0; j < Hidden.Length; j++)
@@ -47,12 +47,10 @@ namespace NeuralNetworkLINE
 
         public float[] DoIt()
         {
-            float[] ResultLayer = new float[InPut.Length];
-
             Hidden = LayerForward(InPut, Hidden, W1);
             OutPut = LayerForward(Hidden, OutPut, W2);
 
-            return ResultLayer;
+            return OutPut;
         }
     }
 }
