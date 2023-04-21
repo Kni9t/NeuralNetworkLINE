@@ -39,3 +39,5 @@ E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\bin\Debug\System
 E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
 E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\bin\Debug\System.Buffers.dll
 E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NeuralNetworkLINE.exe.config
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NetworkWindow.g.cs
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NetworkWindow.baml

@@ -58,7 +58,7 @@ namespace NeuralNetworkLINE
             {
                 ResultErrorLayer[i] = 0;
                 for (int j = 0; j < ErrorLayer.Length; j++)
-                    ResultErrorLayer[i] += ErrorLayer[j] * LinksBetween[i, j];
+                    ResultErrorLayer[i] += ErrorLayer[j] * LinksBetween[j, i];
             }
 
             return ResultErrorLayer;
@@ -74,14 +74,18 @@ namespace NeuralNetworkLINE
 
         public void FindError(float[] ExpectedResult)
         {
+            // Ошибка выходного слоя
             ErrorOutPut = new float[ExpectedResult.Length];
 
             for (int i = 0; i < OutPut.Length; i++)
             {
                 ErrorOutPut[i] = ExpectedResult[i] - OutPut[i];
             }
+
+            ErrorHidden = ErrorBetween(Hidden, ErrorOutPut, W2);
+
             string r = "";
-            foreach (float f in ErrorOutPut) r += " " + f;
+            foreach (float f in ErrorHidden) r += " " + f;
             MessageBox.Show(r);
         }
 
