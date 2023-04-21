@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace NeuralNetworkLINE
 {
@@ -52,5 +56,25 @@ namespace NeuralNetworkLINE
 
             return OutPut;
         }
+
+        /*public void SaveWeights() Не поддерживается сериализация матрицы. Сделать
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "json file (*.json)|*.json|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string FilePath;
+                if ((FilePath = saveFileDialog1.FileName) != null)
+                {
+                    FileStream fs = new FileStream(FilePath, FileMode.OpenOrCreate);
+                    var Json = JsonSerializer.Serialize(W1);
+                    File.WriteAllText(FilePath, Json);
+                }
+            }
+        }*/
     }
 }

@@ -30,3 +30,12 @@ E:\3-For programming\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NeuralNetwork
 E:\3-For programming\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NeuralNetworkLINE.csproj.CoreCompileInputs.cache
 E:\3-For programming\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NeuralNetworkLINE.exe
 E:\3-For programming\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NeuralNetworkLINE.pdb
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\bin\Debug\Newtonsoft.Json.dll
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\bin\Debug\Newtonsoft.Json.xml
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NeuralNetworkLINE.csproj.CopyComplete
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\bin\Debug\System.Text.Json.dll
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\bin\Debug\System.Memory.dll
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\bin\Debug\System.Text.Encodings.Web.dll
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\bin\Debug\System.Buffers.dll
+E:\3-For programming\GitHub\NeuralNetworkLINE\NeuralNetworkLINE\obj\Debug\NeuralNetworkLINE.exe.config
