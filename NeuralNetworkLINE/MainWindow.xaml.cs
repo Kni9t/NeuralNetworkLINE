@@ -38,6 +38,8 @@ namespace NeuralNetworkLINE
             string buf = "";
             foreach (float f in result) buf += f + "";
             MessageBox.Show(buf);
+
+            NW.FindError(new float[2] { 0.8f, 0.2f });
         }
     }
 }

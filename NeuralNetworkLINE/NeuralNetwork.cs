@@ -14,6 +14,7 @@ namespace NeuralNetworkLINE
     {
         float[,] W1, W2; // ?? Первое число обозначает выходной номер, второе входной
         float[] InPut, Hidden, OutPut;
+        float[] ErrorHidden, ErrorOutPut;
 
         public NeuralNetwork(float[] InPut, float[] OutPut)
         {
@@ -35,7 +36,7 @@ namespace NeuralNetworkLINE
                     W2[i, j] = 0.5f;
         }
 
-        public float[] LayerForward(float[] FirstLayer, float[] SecondLayer, float[,] LinksBetween)
+        float[] LayerForward(float[] FirstLayer, float[] SecondLayer, float[,] LinksBetween)
         {
             float[] ResultLayer = SecondLayer;
 
@@ -49,12 +50,39 @@ namespace NeuralNetworkLINE
             return ResultLayer;
         }
 
+        float[] ErrorBetween(float[] FirstLayer, float[] ErrorLayer, float[,] LinksBetween)
+        {
+            float[] ResultErrorLayer = FirstLayer;
+
+            for (int i = 0; i < ResultErrorLayer.Length; i++)
+            {
+                ResultErrorLayer[i] = 0;
+                for (int j = 0; j < ErrorLayer.Length; j++)
+                    ResultErrorLayer[i] += ErrorLayer[j] * LinksBetween[i, j];
+            }
+
+            return ResultErrorLayer;
+        }
+
         public float[] DoIt()
         {
             Hidden = LayerForward(InPut, Hidden, W1);
             OutPut = LayerForward(Hidden, OutPut, W2);
 
             return OutPut;
+        }
+
+        public void FindError(float[] ExpectedResult)
+        {
+            ErrorOutPut = new float[ExpectedResult.Length];
+
+            for (int i = 0; i < OutPut.Length; i++)
+            {
+                ErrorOutPut[i] = ExpectedResult[i] - OutPut[i];
+            }
+            string r = "";
+            foreach (float f in ErrorOutPut) r += " " + f;
+            MessageBox.Show(r);
         }
 
         /*public void SaveWeights() Не поддерживается сериализация матрицы. Сделать
