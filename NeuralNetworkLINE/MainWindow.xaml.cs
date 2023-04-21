@@ -31,7 +31,7 @@ namespace NeuralNetworkLINE
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            float[] bufInput = new float[16], bufOutput = new float[2] { 0, 0 }, result;
+            /*
             for (int i = 0; i < bufInput.Length; i++) 
                 if (i < 4) bufInput[i] = 1; 
                 else bufInput[i] = 0;
@@ -40,7 +40,15 @@ namespace NeuralNetworkLINE
 
             string buf = "";
             foreach (float f in result) buf += f + "";
-            MessageBox.Show(buf);
+            MessageBox.Show(buf);*/
+
+            float[] bufInput = RG.GetGridStateFloat(), bufOutput = new float[2] { 0, 0 }, result;
+            NW = new NeuralNetwork(bufInput, bufOutput);
+            result = NW.DoIt();
+
+            string buf = "";
+            foreach (float f in result) buf += f + "";
+            MessageBox.Show(buf); 
         }
     }
 }
