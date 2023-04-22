@@ -47,45 +47,77 @@ namespace NeuralNetworkLINE
             NetworkWindow networkWindow = new NetworkWindow();
             networkWindow.Owner = this;
 
-            float[] inputLayer= RG.GetGridStateFloat();
+            float[] buf= RG.GetGridStateFloat();
 
             // Отрисовка входного слоя нейронов
-            for (int i = 0; i < inputLayer.Length; i++)
+            for (int i = 0; i < buf.Length; i++)
             {
+                Grid G = new Grid();
                 Ellipse E = new Ellipse();
                 E.Stroke = Brushes.Black;
                 E.StrokeThickness = 1;
                 E.Width = 30;
                 E.Height = 30;
                 E.Fill = Brushes.White;
-                E.RenderTransform = new TranslateTransform() { X = 30, Y = (i+1) * 30 };
-                networkWindow.NetworkCanvas.Children.Add(E);
+                G.RenderTransform = new TranslateTransform() { X = 30, Y = (i+1) * 30 };
+                G.Children.Add(E);
+                TextBlock TB = new TextBlock();
+                TB.Text = buf[i].ToString();
+                TB.RenderTransform = new TranslateTransform() { X = 12, Y = 9 };
+                G.Children.Add(TB);
+                networkWindow.NetworkCanvas.Children.Add(G);
             }
 
             // Отрисовка скрытого слоя нейронов
+            buf = NW.GetHidden();
             for (int i = 0; i < 4; i++)
             {
+                Grid G = new Grid();
                 Ellipse E = new Ellipse();
                 E.Stroke = Brushes.Black;
                 E.StrokeThickness = 1;
                 E.Width = 30;
                 E.Height = 30;
                 E.Fill = Brushes.White;
-                E.RenderTransform = new TranslateTransform() { X = 150, Y = (i + 1) * ((inputLayer.Length * 30 / 4) - 15) };
-                networkWindow.NetworkCanvas.Children.Add(E);
+                G.RenderTransform = new TranslateTransform() { X = 150, Y = (i + 1) * ((RG.GetGridStateFloat().Length * 30 / 4) - 15) };
+                G.Children.Add(E);
+                TextBlock TB = new TextBlock();
+                TB.Text = buf[i].ToString();
+                TB.RenderTransform = new TranslateTransform() { X = 12, Y = 9 };
+                G.Children.Add(TB);
+                networkWindow.NetworkCanvas.Children.Add(G);
+            }
+
+            for (int i = 0; i < buf.Length * 4; i++)
+            {
+                Line L = new Line();
+                L.X1 = 45;
+                L.X2 = 165;
+                L.Y1 = (i + 1) * 30 + 15;
+                L.Y2 = (i + 1) * ((RG.GetGridStateFloat().Length * 30 / 4) - 15) + 15;
+                L.Stroke = Brushes.Black;
+                L.StrokeThickness = 1;
+                networkWindow.NetworkCanvas.Children.Add(L);
             }
 
             // Отрисовка выходного слоя нейронов
+            buf = NW.GetOutPut();
             for (int i = 0; i < 2; i++)
             {
+                Grid G = new Grid();
                 Ellipse E = new Ellipse();
                 E.Stroke = Brushes.Black;
                 E.StrokeThickness = 1;
                 E.Width = 30;
                 E.Height = 30;
                 E.Fill = Brushes.White;
-                E.RenderTransform = new TranslateTransform() { X = 270, Y = (i + 1) * ((inputLayer.Length * 30 / 2) - 65) };
-                networkWindow.NetworkCanvas.Children.Add(E);
+                G.RenderTransform = new TranslateTransform() { X = 270, Y = (i + 1) * ((RG.GetGridStateFloat().Length * 30 / 2) - 65) };
+                G.Children.Add(E);
+                TextBlock TB = new TextBlock();
+                TB.Text = buf[i].ToString();
+                TB.RenderTransform = new TranslateTransform() { X = 12, Y = 9 };
+                G.Children.Add(TB);
+                networkWindow.NetworkCanvas.Children.Add(G);
             }
 
             networkWindow.Show();

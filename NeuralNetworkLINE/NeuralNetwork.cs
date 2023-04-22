@@ -38,7 +38,9 @@ namespace NeuralNetworkLINE
 
         float[] LayerForward(float[] FirstLayer, float[] SecondLayer, float[,] LinksBetween)
         {
-            float[] ResultLayer = SecondLayer;
+            float[] ResultLayer = new float[SecondLayer.Length];
+            for (int i = 0; i < SecondLayer.Length; i++)
+                ResultLayer[i] = SecondLayer[i];
 
             for (int i = 0; i < ResultLayer.Length; i++)
             {
@@ -52,7 +54,9 @@ namespace NeuralNetworkLINE
 
         float[] ErrorBetween(float[] FirstLayer, float[] ErrorLayer, float[,] LinksBetween)
         {
-            float[] ResultErrorLayer = FirstLayer;
+            float[] ResultErrorLayer = new float[FirstLayer.Length];
+            for (int i = 0; i < FirstLayer.Length; i++)
+                ResultErrorLayer[i] = FirstLayer[i];
 
             for (int i = 0; i < ResultErrorLayer.Length; i++)
             {
@@ -85,8 +89,17 @@ namespace NeuralNetworkLINE
             ErrorHidden = ErrorBetween(Hidden, ErrorOutPut, W2);
 
             string r = "";
-            foreach (float f in ErrorHidden) r += " " + f;
+            foreach (float f in ErrorOutPut) r += " " + f;
             MessageBox.Show(r);
+        }
+
+        public float[] GetHidden()
+        {
+            return Hidden;
+        }
+        public float[] GetOutPut()
+        {
+            return OutPut;
         }
 
         /*public void SaveWeights() Не поддерживается сериализация матрицы. Сделать
