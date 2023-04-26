@@ -12,9 +12,10 @@ namespace NeuralNetworkLINE
 {
     public class NeuralNetwork
     {
-        float[,] W1, W2; // ?? Первое число обозначает выходной номер, второе входной
+        float[,] W1, W2; // Двумерный массив, так как каждая строчка представляет число нейрон в первом слое, а столбец число нейронов во втором. Значение же в массивы - значения веса между этими нейронами
         float[] InPut, Hidden, OutPut;
         float[] ErrorHidden, ErrorOutPut;
+        float LearningRate = 0.3f;
 
         public NeuralNetwork(float[] InPut, float[] OutPut)
         {
@@ -39,8 +40,7 @@ namespace NeuralNetworkLINE
         float[] LayerForward(float[] FirstLayer, float[] SecondLayer, float[,] LinksBetween)
         {
             float[] ResultLayer = new float[SecondLayer.Length];
-            for (int i = 0; i < SecondLayer.Length; i++)
-                ResultLayer[i] = SecondLayer[i];
+            Array.Copy(SecondLayer, ResultLayer, SecondLayer.Length);
 
             for (int i = 0; i < ResultLayer.Length; i++)
             {
@@ -68,6 +68,22 @@ namespace NeuralNetworkLINE
             return ResultErrorLayer;
         }
 
+        void WeightСorrection(float[] FirstLayer, float[] FirstErrorLayer, float[] SecondLayer, float[,] LinksBetween) // Доделать формулу
+        {
+            float[,] NewLinksBetween = new float[LinksBetween.GetLength(0),LinksBetween.GetLength(0)];
+
+            for (int i = 0; i< NewLinksBetween.GetLength(0); i++)
+            {
+                for (int j = 0; j < NewLinksBetween.GetLength(1); j++)
+                {
+                    // Формула вычисления нового веса следующая:
+                    // Wн = Wc + C * E * x * (y * (1 - y))
+                    // Где: Wн - новый вес, Wc - старый вес, C - коэф. обучения, E - ошибка правого нейрона, х - входное значение нейрона, у - выходное значение нейрона
+                    NewLinksBetween[i, j] = LinksBetween[i, j] + LearningRate * FirstErrorLayer[j] * (SecondLayer[i] * LinksBetween[i,j]);
+                }
+            }
+        }
+
         public float[] DoIt()
         {
             Hidden = LayerForward(InPut, Hidden, W1);
@@ -86,11 +102,8 @@ namespace NeuralNetworkLINE
                 ErrorOutPut[i] = ExpectedResult[i] - OutPut[i];
             }
 
+            // Ошибка скрытого слоя
             ErrorHidden = ErrorBetween(Hidden, ErrorOutPut, W2);
-
-            string r = "";
-            foreach (float f in ErrorOutPut) r += " " + f;
-            MessageBox.Show(r);
         }
 
         public float[] GetHidden()

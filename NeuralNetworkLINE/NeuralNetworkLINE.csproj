@@ -60,6 +60,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="NeuralNetworkUPD.cs" />
     <Compile Include="NetworkWindow.xaml.cs">
       <DependentUpon>NetworkWindow.xaml</DependentUpon>
     </Compile>

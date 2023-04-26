@@ -39,7 +39,7 @@ namespace NeuralNetworkLINE
             foreach (float f in result) buf += f + "";
             MessageBox.Show(buf);
 
-            NW.FindError(new float[2] { 0.8f, 0.2f });
+            NW.FindError(new float[2] { 0.8f, 0.2f }); // Первое число - горизонтальная линия, второе число - вертикальная линия | >0,8 есть линия, <0.2 нету
         }
 
         private void ShowNetworkButton(object sender, RoutedEventArgs e)
@@ -88,7 +88,7 @@ namespace NeuralNetworkLINE
                 networkWindow.NetworkCanvas.Children.Add(G);
             }
 
-            for (int i = 0; i < buf.Length * 4; i++)
+            /*for (int i = 0; i < buf.Length * 4; i++) // Отрисовка линий, доработать
             {
                 Line L = new Line();
                 L.X1 = 45;
@@ -98,7 +98,7 @@ namespace NeuralNetworkLINE
                 L.Stroke = Brushes.Black;
                 L.StrokeThickness = 1;
                 networkWindow.NetworkCanvas.Children.Add(L);
-            }
+            }*/
 
             // Отрисовка выходного слоя нейронов
             buf = NW.GetOutPut();
