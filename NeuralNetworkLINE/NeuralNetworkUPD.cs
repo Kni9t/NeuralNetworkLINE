@@ -36,6 +36,37 @@ namespace NeuralNetworkLINE
                     for (int j = 0; j < weight.GetLength(1); j++)
                         weight[i,j] = 0.5f; // Задание изначального веса
         }
+        public NeuralNetworkUPD(int CountInPut = 16, int CountOutPut = 2, int CountHiddenLayers = 1, int[] HiddenNeural = null )
+        {
+            // Конструктор для задание нейронной сети с различным числом нейронов на каждом слое
+            // Создание слоев нейронов
+            Layers = new List<float[,]>();
+            Layers.Add(new float[CountInPut, CountInPut]);
+
+            if (HiddenNeural != null)
+            {
+                for (int i = 0; i < CountHiddenLayers; i++)
+                    Layers.Add(new float[HiddenNeural[i], HiddenNeural[i]]);
+            }
+            else
+            {
+                for (int i = 0; i < CountHiddenLayers; i++)
+                    Layers.Add(new float[4, 4]);
+            }
+
+            Layers.Add(new float[CountOutPut, CountOutPut]);
+
+            // Создание весов между слоями
+            Weight = new List<float[,]>();
+
+            for (int i = 0; i < Weight.Count - 1; i++)
+                Weight.Add(new float[Weight[i].GetLength(0), Weight[i + 1].GetLength(0)]);
+
+            foreach (float[,] weight in Weight)
+                for (int i = 0; i < weight.GetLength(0); i++)
+                    for (int j = 0; j < weight.GetLength(1); j++)
+                        weight[i, j] = 0.5f; // Задание изначального веса
+        }
 
         float[,] LayerForward(float[,] FirstLayer, float[,] SecondLayer, float[,] LinksBetween) // Не тестировалось
         {
