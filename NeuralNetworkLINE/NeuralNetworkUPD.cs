@@ -70,7 +70,7 @@ namespace NeuralNetworkLINE
 
         float[,] LayerForward(float[,] FirstLayer, float[,] SecondLayer, float[,] LinksBetween) // Не тестировалось
         {
-            // Возвращает новые значения нейронов для SecondLayer
+            // Возвращает новые значения нейронов для слоя из SecondLayer
             float[,] ResultLayer = new float[SecondLayer.GetLength(0), SecondLayer.GetLength(1)];
             for (int i = 0; i < SecondLayer.GetLength(1); i++) ResultLayer[0, i] = SecondLayer[0, i];
 
@@ -87,7 +87,7 @@ namespace NeuralNetworkLINE
 
         float[,] ErrorBetween(float[,] FirstLayer, float[,] SecondLayer, float[,] LinksBetween) // Не тестировалось
         {
-            // Возвращает новые значения ошибки нейронов для FirstLayer
+            // Возвращает новые значения ошибки нейронов для слоя из FirstLayer
             float[,] ResultErrorLayer = new float[FirstLayer.GetLength(0), FirstLayer.GetLength(1)];
             for (int i = 0; i < FirstLayer.GetLength(0); i++) ResultErrorLayer[i, 0] = FirstLayer[i, 0];
 
@@ -100,6 +100,21 @@ namespace NeuralNetworkLINE
             }
 
             return ResultErrorLayer;
+        }
+
+        public void FindError(float[] ExpectedResult) // Не тестировалось
+        {
+            // Ошибка выходного слоя
+            for (int i = 0; i < Layers[Layers.Count].GetLength(1); i++)
+            {
+                Layers[Layers.Count][0,i] = ExpectedResult[i] - Layers[0][i, 0];
+            }
+
+            // Ошибкb скрытого слоя
+            for (int i = Layers.Count-1; i > 0; i--)
+            {
+                Layers[i] = ErrorBetween(Layers[i], Layers[i+1], Weight[i]);
+            }
         }
 
     }
