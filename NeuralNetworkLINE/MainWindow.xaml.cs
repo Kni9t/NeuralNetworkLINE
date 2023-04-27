@@ -19,6 +19,7 @@ namespace NeuralNetworkLINE
     {
         RectGrid RG;
         NeuralNetwork NW;
+        NeuralNetworkUPD NWt;
         public MainWindow()
         {
             InitializeComponent();
@@ -31,7 +32,6 @@ namespace NeuralNetworkLINE
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(RG.GetGridStateString());
             /*float[] bufInput = RG.GetGridStateFloat(), bufOutput = new float[2] { 0, 0 }, result;
             NW = new NeuralNetwork(bufInput, bufOutput);
             result = NW.DoIt();
@@ -40,7 +40,15 @@ namespace NeuralNetworkLINE
             foreach (float f in result) buf += f + "";
             MessageBox.Show(buf);
 
-            NW.FindError(new float[2] { 0.8f, 0.2f }); // Первое число - горизонтальная линия, второе число - вертикальная линия | >0,8 есть линия, <0.2 нету*/
+            NW.FindError(new float[2] { 0.8f, 0.2f }); */ // Первое число - горизонтальная линия, второе число - вертикальная линия | >0,8 есть линия, <0.2 нету
+            NWt = new NeuralNetworkUPD();
+            NWt.InPut(RG.GetGridStateFloat());
+
+            float[] result = NWt.DoIt();
+
+            string buf = "";
+            foreach (float f in result) buf += f + "";
+            MessageBox.Show(buf);
         }
 
         private void ShowNetworkButton(object sender, RoutedEventArgs e)
