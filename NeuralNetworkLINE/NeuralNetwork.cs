@@ -1,120 +1,198 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace NeuralNetworkLINE
 {
-    public class NeuralNetwork
+    internal class NeuralNetwork
     {
-        float[,] W1, W2; // Двумерный массив, так как каждая строчка представляет число нейрон в первом слое, а столбец число нейронов во втором. Значение же в массивы - значения веса между этими нейронами
-        float[] InPut, Hidden, OutPut;
-        float[] ErrorHidden, ErrorOutPut;
+        List<float[,]> Weight; // Список связей между слоями двумя слоями, где каждый элемент - это
+        // Двумерный массив. Каждый элемент массива - это значение веса между парой нейронов W1[i, j] в двух соседних слоях, где i - это номер нейрона в первом слою, а j - номер нейрона во втором слою
+        List<float[,]> Layers; // Список слоев нейронной сети, где каждый элемент списка это - 
+        // Двумерный массив, с двумя столбцами, где первый это непосредственно значений нейрона, а второй это ошибка слоя нейрона
+        // При этом первый элемент списка - всегда входной слой, а последний - выходной
         float LearningRate = 0.3f;
-
-        public NeuralNetwork(float[] InPut, float[] OutPut)
+        public NeuralNetwork(int CountInPut = 16, int CountOutPut = 2, int CountHiddenLayers = 1, int CountHiddenNeural = 4)
         {
-            this.InPut = InPut;
-            this.OutPut = OutPut;
+            // Создание слоев нейронов
+            Layers = new List<float[,]>();
+            Layers.Add(new float[CountInPut, 2]);
 
-            Hidden = new float[4] {0, 0, 0, 0};
+            for (int i = 0; i < CountHiddenLayers; i++)
+                Layers.Add(new float[CountHiddenNeural, 2]);
 
-            W1 = new float[Hidden.Length, InPut.Length];
+            Layers.Add(new float[CountOutPut, 2]);
 
-            for (int i = 0; i < Hidden.Length; i++)
-                for (int j = 0; j < InPut.Length; j++) 
-                    W1[i,j] = 0.5f;
+            // Создание весов между слоями
+            Weight = new List<float[,]>();
 
-            W2 = new float[OutPut.Length, Hidden.Length];
+            for (int l = 0; l < Layers.Count - 1; l++)
+            {
+                float[,] buf = new float[Layers[l].GetLength(0), Layers[l + 1].GetLength(0)];
 
-            for (int i = 0; i < OutPut.Length; i++)
-                for (int j = 0; j < Hidden.Length; j++)
-                    W2[i, j] = 0.5f;
+                for (int i = 0; i < buf.GetLength(0); i++)
+                    for (int j = 0; j < buf.GetLength(1); j++)
+                        buf[i, j] = 0.5f;
+
+                Weight.Add(buf);
+            }
+        }
+        public NeuralNetwork(int[] HiddenNeural, int CountInPut = 16, int CountOutPut = 2, int CountHiddenLayers = 1)
+        {
+            // Конструктор для задание нейронной сети с различным числом нейронов на каждом слое
+            // Создание слоев нейронов
+            Layers = new List<float[,]>();
+            Layers.Add(new float[CountInPut, CountInPut]);
+
+            for (int i = 0; i < CountHiddenLayers; i++)
+                Layers.Add(new float[HiddenNeural[i], HiddenNeural[i]]);
+
+            Layers.Add(new float[CountOutPut, CountOutPut]);
+
+            // Создание весов между слоями
+            Weight = new List<float[,]>();
+
+            for (int i = 0; i < Weight.Count - 1; i++)
+                Weight.Add(new float[Weight[i].GetLength(0), Weight[i + 1].GetLength(0)]);
+
+            foreach (float[,] weight in Weight)
+                for (int i = 0; i < weight.GetLength(0); i++)
+                    for (int j = 0; j < weight.GetLength(1); j++)
+                        weight[i, j] = 0.5f; // Задание изначального веса
+        }
+        public void InPut(float[] InPutMass)
+        {
+            for (int i = 0; i < InPutMass.Length; i++)
+            {
+                Layers[0][i, 0] = InPutMass[i];
+            }
+        }
+        public void InPut(float[,] InPutMass)
+        {
+            int i = 0;
+
+            foreach (float f in InPutMass)
+            {
+                Layers[0][i, 0] = f;
+                i++;
+            }
         }
 
-        float[] LayerForward(float[] FirstLayer, float[] SecondLayer, float[,] LinksBetween)
+        float[,] LayerForward(float[,] FirstLayer, float[,] SecondLayer, float[,] LinksBetween)
         {
-            float[] ResultLayer = new float[SecondLayer.Length];
-            Array.Copy(SecondLayer, ResultLayer, SecondLayer.Length);
+            // Возвращает новые значения нейронов для слоя из SecondLayer
+            float[,] ResultLayer = new float[SecondLayer.GetLength(0), 2];
+            for (int i = 0; i < SecondLayer.GetLength(0); i++) ResultLayer[i, 0] = SecondLayer[i, 0];
 
-            for (int i = 0; i < ResultLayer.Length; i++)
+            for (int i = 0; i < ResultLayer.GetLength(0); i++)
             {
-                ResultLayer[i] = 0;
-                for (int j = 0; j < FirstLayer.Length; j++)
-                    ResultLayer[i] += FirstLayer[j] * LinksBetween[i, j];
+                ResultLayer[i, 0] = 0;
+
+                for (int j = 0; j < FirstLayer.GetLength(0); j++)
+                    ResultLayer[i, 0] += FirstLayer[j, 0] * LinksBetween[j, i];
             }
 
             return ResultLayer;
         }
 
-        float[] ErrorBetween(float[] FirstLayer, float[] ErrorLayer, float[,] LinksBetween)
+        float[,] ErrorBetween(float[,] FirstLayer, float[,] SecondLayer, float[,] LinksBetween)
         {
-            float[] ResultErrorLayer = new float[FirstLayer.Length];
-            for (int i = 0; i < FirstLayer.Length; i++)
-                ResultErrorLayer[i] = FirstLayer[i];
+            // Возвращает новые значения ошибки нейронов для слоя из FirstLayer
+            float[,] ResultErrorLayer = new float[FirstLayer.GetLength(0), FirstLayer.GetLength(1)];
+            for (int i = 0; i < FirstLayer.GetLength(0); i++) ResultErrorLayer[i, 0] = FirstLayer[i, 0];
 
-            for (int i = 0; i < ResultErrorLayer.Length; i++)
+            for (int i = 0; i < ResultErrorLayer.GetLength(0); i++)
             {
-                ResultErrorLayer[i] = 0;
-                for (int j = 0; j < ErrorLayer.Length; j++)
-                    ResultErrorLayer[i] += ErrorLayer[j] * LinksBetween[j, i];
+                ResultErrorLayer[i, 1] = 0;
+
+                for (int j = 0; j < SecondLayer.GetLength(0); j++)
+                    ResultErrorLayer[i, 1] += SecondLayer[j, 1] * LinksBetween[i, j];
             }
 
             return ResultErrorLayer;
         }
 
-        void WeightСorrection(float[] FirstLayer, float[] FirstErrorLayer, float[] SecondLayer, float[,] LinksBetween) // Доделать формулу
+        public void FindError(float[] ExpectedResult)
         {
-            float[,] NewLinksBetween = new float[LinksBetween.GetLength(0),LinksBetween.GetLength(0)];
+            // Ошибка выходного слоя
+            for (int i = 0; i < Layers[Layers.Count - 1].GetLength(0); i++)
+            {
+                Layers[Layers.Count - 1][i, 1] = ExpectedResult[i] - Layers[Layers.Count - 1][i, 0];
+            }
 
-            for (int i = 0; i< NewLinksBetween.GetLength(0); i++)
+            // Ошибка скрытого слоя
+            for (int i = Layers.Count-2; i > 0; i--)
+            {
+                Layers[i] = ErrorBetween(Layers[i], Layers[i+1], Weight[i]);
+            }
+        }
+        float[,] WeightСorrection(float[,] FirstLayer, float[,] SecondLayer, float[,] LinksBetween) // Подумать над формулой расчетов
+        {
+            float[,] NewLinksBetween = new float[LinksBetween.GetLength(0), LinksBetween.GetLength(1)];
+
+            for (int i = 0; i < NewLinksBetween.GetLength(0); i++)
             {
                 for (int j = 0; j < NewLinksBetween.GetLength(1); j++)
                 {
                     // Формула вычисления нового веса следующая:
                     // Wн = Wc + C * E * x * (y * (1 - y))
                     // Где: Wн - новый вес, Wc - старый вес, C - коэф. обучения, E - ошибка правого нейрона, х - входное значение нейрона, у - выходное значение нейрона
-                    NewLinksBetween[i, j] = LinksBetween[i, j] + LearningRate * FirstErrorLayer[j] * (SecondLayer[i] * LinksBetween[i,j]);
+                    NewLinksBetween[i, j] = LinksBetween[i, j] + LearningRate * SecondLayer[j, 1] * FirstLayer[j, 0] * (SecondLayer[j, 0] * (1 - SecondLayer[j, 0]));
                 }
             }
+            return NewLinksBetween;
         }
-
-        public float[] DoIt()
+        public void Correct(float[] ExpectedResult) // Тестить
         {
-            Hidden = LayerForward(InPut, Hidden, W1);
-            OutPut = LayerForward(Hidden, OutPut, W2);
+            FindError(ExpectedResult);
 
-            return OutPut;
-        }
-
-        public void FindError(float[] ExpectedResult)
-        {
-            // Ошибка выходного слоя
-            ErrorOutPut = new float[ExpectedResult.Length];
-
-            for (int i = 0; i < OutPut.Length; i++)
+            for (int i = Weight.Count-1; i >= 0; i--)
             {
-                ErrorOutPut[i] = ExpectedResult[i] - OutPut[i];
+                Weight[i] = WeightСorrection(Layers[i], Layers[i + 1], Weight[i]);
+            }
+        }
+
+        public float[] DoIt() // Тестовая функция вывода результата
+        {
+            float[] Result = new float[Layers[Layers.Count - 1].GetLength(0)];
+
+            for (int i = 0; i < Weight.Count; i++)
+            {
+                for (int j = 0; j < Layers[i + 1].GetLength(0); j++)
+                {
+                    for (int g = 0; g < Layers[i].GetLength(0); g++)
+                    {
+                        Layers[i + 1] = LayerForward(Layers[i], Layers[i + 1], Weight[i]);
+                    }
+                }
             }
 
-            // Ошибка скрытого слоя
-            ErrorHidden = ErrorBetween(Hidden, ErrorOutPut, W2);
+            for (int i = 0; i < Result.Length; i++)
+                Result[i] = Layers[Layers.Count - 1][i, 0];
+            return Result;
         }
 
-        public float[] GetHidden()
+        /*public void SaveWeights() Не поддерживается сериализация матрицы. Сделать
         {
-            return Hidden;
-        }
-        public float[] GetOutPut()
-        {
-            return OutPut;
-        }
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
-        
+            saveFileDialog1.Filter = "json file (*.json)|*.json|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string FilePath;
+                if ((FilePath = saveFileDialog1.FileName) != null)
+                {
+                    FileStream fs = new FileStream(FilePath, FileMode.OpenOrCreate);
+                    var Json = JsonSerializer.Serialize(W1);
+                    File.WriteAllText(FilePath, Json);
+                }
+            }
+        }*/
     }
 }
