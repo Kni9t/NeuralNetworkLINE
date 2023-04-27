@@ -25,26 +25,9 @@ namespace NeuralNetworkLINE
             InitializeComponent();
             RG = new RectGrid(BaseCanvas, 4);
         }
-        public void CanvasMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            //if (e.ChangedButton == MouseButton.Left) BaseLabel.Content = C1.test();
-        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            /*float[] bufInput = new float[RG.GetGridStateFloat().GetLength(0)], bufOutput = new float[2] { 0, 0 }, result;
-            float[,] bbufInput = RG.GetGridStateFloat();
-            for (int i = 0; i < bbufInput.GetLength(0); i++) bufInput[i] = bbufInput[i, 0];
-
-            NW = new NeuralNetwork(bufInput, bufOutput);
-            result = NW.DoIt();
-
-            string buf = "";
-            foreach (float f in result) buf += f + "";
-            MessageBox.Show(buf);
-
-            NW.FindError(new float[2] { 0.8f, 0.2f });  */ // Первое число - горизонтальная линия, второе число - вертикальная линия | >0,8 есть линия, <0.2 нету
-            
             NWt = new NeuralNetworkUPD();
             NWt.InPut(RG.GetGridStateFloat());
 
@@ -54,7 +37,8 @@ namespace NeuralNetworkLINE
             foreach (float f in result) buf += f + "";
             MessageBox.Show(buf);
 
-            NWt.FindError(new float[2] {0.8f, 0.2f});
+            NWt.Correct(new float[2] { 0.8f, 0.2f });
+            NWt.FindError(new float[2] {0.8f, 0.2f}); // Первое число - горизонтальная линия, второе число - вертикальная линия | >0,8 есть линия, <0.2 нету
         }
 
         private void ShowNetworkButton(object sender, RoutedEventArgs e)

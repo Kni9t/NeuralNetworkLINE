@@ -98,7 +98,7 @@ namespace NeuralNetworkLINE
             return ResultLayer;
         }
 
-        float[,] ErrorBetween(float[,] FirstLayer, float[,] SecondLayer, float[,] LinksBetween) // Не тестировалось
+        float[,] ErrorBetween(float[,] FirstLayer, float[,] SecondLayer, float[,] LinksBetween)
         {
             // Возвращает новые значения ошибки нейронов для слоя из FirstLayer
             float[,] ResultErrorLayer = new float[FirstLayer.GetLength(0), FirstLayer.GetLength(1)];
@@ -128,10 +128,31 @@ namespace NeuralNetworkLINE
             {
                 Layers[i] = ErrorBetween(Layers[i], Layers[i+1], Weight[i]);
             }
-            
-            string buf = "";
-            for (int i = 0; i < Layers[Layers.Count-1].GetLength(1); i++) buf += Layers[Layers.Count-1][i, 1] + " ";
-            MessageBox.Show(buf);
+        }
+        float[,] WeightСorrection(float[,] FirstLayer, float[,] SecondLayer, float[,] LinksBetween)
+        {
+            float[,] NewLinksBetween = new float[LinksBetween.GetLength(0), LinksBetween.GetLength(1)];
+
+            for (int i = 0; i < NewLinksBetween.GetLength(0); i++)
+            {
+                for (int j = 0; j < NewLinksBetween.GetLength(1); j++)
+                {
+                    // Формула вычисления нового веса следующая:
+                    // Wн = Wc + C * E * x * (y * (1 - y))
+                    // Где: Wн - новый вес, Wc - старый вес, C - коэф. обучения, E - ошибка правого нейрона, х - входное значение нейрона, у - выходное значение нейрона
+                    NewLinksBetween[i, j] = LinksBetween[i, j] + LearningRate * SecondLayer[j, 1] * FirstLayer[j, 0] * (SecondLayer[j, 0] * (1 - SecondLayer[j, 0]));
+                }
+            }
+            return NewLinksBetween;
+        }
+        public void Correct(float[] ExpectedResult) // Тестить
+        {
+            FindError(ExpectedResult);
+
+            for (int i = Weight.Count-1; i >= 0; i--)
+            {
+                Weight[i] = WeightСorrection(Layers[i], Layers[i + 1], Weight[i]);
+            }
         }
 
         public float[] DoIt() // Тестовая функция вывода результата
@@ -153,5 +174,25 @@ namespace NeuralNetworkLINE
                 Result[i] = Layers[Layers.Count - 1][i, 0];
             return Result;
         }
+
+        /*public void SaveWeights() Не поддерживается сериализация матрицы. Сделать
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "json file (*.json)|*.json|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string FilePath;
+                if ((FilePath = saveFileDialog1.FileName) != null)
+                {
+                    FileStream fs = new FileStream(FilePath, FileMode.OpenOrCreate);
+                    var Json = JsonSerializer.Serialize(W1);
+                    File.WriteAllText(FilePath, Json);
+                }
+            }
+        }*/
     }
 }
