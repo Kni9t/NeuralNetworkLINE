@@ -10,12 +10,14 @@ using System.Windows.Shapes;
 
 namespace NeuralNetworkLINE
 {
-    public class RectGrid
+    internal class RectGrid
     {
-        List<Rectangle> RectList = new List<Rectangle>();
+        Rectangle[,] RectList;
         public RectGrid(Canvas canvas, int col, int str = -1)
         {
             if (str == -1) str = col;
+            RectList = new Rectangle[col, str];
+            
             for (int i = 0; i < col; i++)
                 for (int j = 0; j < str; j++)
                 {
@@ -28,10 +30,9 @@ namespace NeuralNetworkLINE
                     R.Fill = Brushes.White;
                     R.RenderTransform = new TranslateTransform() { X = i * 50, Y = j * 50 };
                     canvas.Children.Add(R);
-                    RectList.Add(R);
+                    RectList[j, i] = R;
                 }
         }
-
         void ChangeBack(object sender, MouseButtonEventArgs e)
         {
             if (((Rectangle)sender).Fill == Brushes.White)
@@ -39,31 +40,30 @@ namespace NeuralNetworkLINE
             else
                 ((Rectangle)sender).Fill = Brushes.White;
         }
-
         public string GetGridStateString()
         {
             string result = "";
-            int Incr = 1;
-            foreach (Rectangle R in RectList)
+      
+            for (int i = 0; i < RectList.GetLength(0); i++)
             {
-                if (R.Fill == Brushes.Black) result += " 1 ";
-                else result += " 0 ";
-                if (Incr % 4 == 0) result += "\n";
-                Incr++;
+                for (int j = 0; j < RectList.GetLength(1); j++)
+                {
+                    if (RectList[i, j].Fill == Brushes.Black) result += " 1 ";
+                    else result += " 0 ";
+                }
+                result += "\n";
             }
 
             return result;
         }
-        public float[] GetGridStateFloat()
+        public float[,] GetGridStateFloat()
         {
-            float[] result = new float[RectList.Count];
-            int Incr = 0;
-            foreach (Rectangle R in RectList)
-            {
-                if (R.Fill == Brushes.Black) result[Incr] = 1;
-                else result[Incr] = 0;
-                Incr++;
-            }
+            float[,] result = new float[RectList.GetLength(0), RectList.GetLength(1)];
+
+            for (int i = 0; i < RectList.GetLength(0); i++)
+                for (int j = 0; j < RectList.GetLength(1); j++)
+                    if (RectList[i, j].Fill == Brushes.Black) result[i, j] = 1;
+                    else result[i, j] = 0;
 
             return result;
         }

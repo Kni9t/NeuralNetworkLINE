@@ -31,7 +31,8 @@ namespace NeuralNetworkLINE
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            float[] bufInput = RG.GetGridStateFloat(), bufOutput = new float[2] { 0, 0 }, result;
+            MessageBox.Show(RG.GetGridStateString());
+            /*float[] bufInput = RG.GetGridStateFloat(), bufOutput = new float[2] { 0, 0 }, result;
             NW = new NeuralNetwork(bufInput, bufOutput);
             result = NW.DoIt();
 
@@ -39,12 +40,13 @@ namespace NeuralNetworkLINE
             foreach (float f in result) buf += f + "";
             MessageBox.Show(buf);
 
-            NW.FindError(new float[2] { 0.8f, 0.2f }); // Первое число - горизонтальная линия, второе число - вертикальная линия | >0,8 есть линия, <0.2 нету
+            NW.FindError(new float[2] { 0.8f, 0.2f }); // Первое число - горизонтальная линия, второе число - вертикальная линия | >0,8 есть линия, <0.2 нету*/
         }
 
         private void ShowNetworkButton(object sender, RoutedEventArgs e)
         {
-            NetworkWindow networkWindow = new NetworkWindow();
+            // Переделать под двумерный массив
+            /*NetworkWindow networkWindow = new NetworkWindow();
             networkWindow.Owner = this;
 
             float[] buf= RG.GetGridStateFloat();
@@ -88,7 +90,7 @@ namespace NeuralNetworkLINE
                 networkWindow.NetworkCanvas.Children.Add(G);
             }
 
-            /*for (int i = 0; i < buf.Length * 4; i++) // Отрисовка линий, доработать
+            for (int i = 0; i < buf.Length * 4; i++) // Отрисовка линий, доработать
             {
                 Line L = new Line();
                 L.X1 = 45;
@@ -98,7 +100,7 @@ namespace NeuralNetworkLINE
                 L.Stroke = Brushes.Black;
                 L.StrokeThickness = 1;
                 networkWindow.NetworkCanvas.Children.Add(L);
-            }*/
+            }
 
             // Отрисовка выходного слоя нейронов
             buf = NW.GetOutPut();
@@ -120,7 +122,7 @@ namespace NeuralNetworkLINE
                 networkWindow.NetworkCanvas.Children.Add(G);
             }
 
-            networkWindow.Show();
+            networkWindow.Show();*/
         }
     }
 }
