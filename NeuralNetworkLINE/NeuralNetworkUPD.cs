@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NeuralNetworkLINE
 {
@@ -117,16 +118,20 @@ namespace NeuralNetworkLINE
         public void FindError(float[] ExpectedResult) // Не тестировалось
         {
             // Ошибка выходного слоя
-            for (int i = 0; i < Layers[Layers.Count].GetLength(1); i++)
+            for (int i = 0; i < Layers[Layers.Count - 1].GetLength(1); i++)
             {
-                Layers[Layers.Count][0,i] = ExpectedResult[i] - Layers[0][i, 0];
+                Layers[Layers.Count - 1][i, 1] = ExpectedResult[i] - Layers[Layers.Count - 1][i, 0];
             }
 
-            // Ошибкb скрытого слоя
-            for (int i = Layers.Count-1; i > 0; i--)
+            /*// Ошибка скрытого слоя
+            for (int i = Layers.Count-2; i > 0; i--)
             {
                 Layers[i] = ErrorBetween(Layers[i], Layers[i+1], Weight[i]);
             }
+            */
+            string buf = "";
+            for (int i = 0; i < Layers[Layers.Count-1].GetLength(1); i++) buf += Layers[Layers.Count-1][i, 1] + " ";
+            MessageBox.Show(buf);
         }
 
         public float[] DoIt() // Тестовая функция вывода результата
