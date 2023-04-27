@@ -104,31 +104,31 @@ namespace NeuralNetworkLINE
             float[,] ResultErrorLayer = new float[FirstLayer.GetLength(0), FirstLayer.GetLength(1)];
             for (int i = 0; i < FirstLayer.GetLength(0); i++) ResultErrorLayer[i, 0] = FirstLayer[i, 0];
 
-            for (int i = 0; i < ResultErrorLayer.GetLength(1); i++)
+            for (int i = 0; i < ResultErrorLayer.GetLength(0); i++)
             {
                 ResultErrorLayer[i, 1] = 0;
 
-                for (int j = 0; j < SecondLayer.GetLength(1); j++)
-                    ResultErrorLayer[i, 1] += SecondLayer[1, j] * LinksBetween[i, j];
+                for (int j = 0; j < SecondLayer.GetLength(0); j++)
+                    ResultErrorLayer[i, 1] += SecondLayer[j, 1] * LinksBetween[i, j];
             }
 
             return ResultErrorLayer;
         }
 
-        public void FindError(float[] ExpectedResult) // Не тестировалось
+        public void FindError(float[] ExpectedResult)
         {
             // Ошибка выходного слоя
-            for (int i = 0; i < Layers[Layers.Count - 1].GetLength(1); i++)
+            for (int i = 0; i < Layers[Layers.Count - 1].GetLength(0); i++)
             {
                 Layers[Layers.Count - 1][i, 1] = ExpectedResult[i] - Layers[Layers.Count - 1][i, 0];
             }
 
-            /*// Ошибка скрытого слоя
+            // Ошибка скрытого слоя
             for (int i = Layers.Count-2; i > 0; i--)
             {
                 Layers[i] = ErrorBetween(Layers[i], Layers[i+1], Weight[i]);
             }
-            */
+            
             string buf = "";
             for (int i = 0; i < Layers[Layers.Count-1].GetLength(1); i++) buf += Layers[Layers.Count-1][i, 1] + " ";
             MessageBox.Show(buf);
