@@ -80,7 +80,7 @@ namespace NeuralNetworkLINE
             }
         }
 
-        float[,] LayerForward(float[,] FirstLayer, float[,] SecondLayer, float[,] LinksBetween) // Не тестировалось
+        float[,] LayerForward(float[,] FirstLayer, float[,] SecondLayer, float[,] LinksBetween)
         {
             // Возвращает новые значения нейронов для слоя из SecondLayer
             float[,] ResultLayer = new float[SecondLayer.GetLength(0), 2];
@@ -105,10 +105,10 @@ namespace NeuralNetworkLINE
 
             for (int i = 0; i < ResultErrorLayer.GetLength(1); i++)
             {
-                ResultErrorLayer[0, i] = 0;
+                ResultErrorLayer[i, 1] = 0;
 
                 for (int j = 0; j < SecondLayer.GetLength(1); j++)
-                    ResultErrorLayer[0, i] += SecondLayer[0, j] * LinksBetween[i, j];
+                    ResultErrorLayer[i, 1] += SecondLayer[1, j] * LinksBetween[i, j];
             }
 
             return ResultErrorLayer;
