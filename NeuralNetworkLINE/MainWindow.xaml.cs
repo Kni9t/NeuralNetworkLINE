@@ -23,21 +23,21 @@ namespace NeuralNetworkLINE
         {
             InitializeComponent();
             RG = new RectGrid(BaseCanvas, 4);
+            NW = new NeuralNetwork();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            NW = new NeuralNetwork();
             NW.InPut(RG.GetGridStateFloat());
 
             float[] result = NW.DoIt();
 
             string buf = "";
-            foreach (float f in result) buf += f + "";
+            foreach (float f in result) buf += f + " ";
             MessageBox.Show(buf);
 
             NW.Correct(new float[2] { 0.8f, 0.2f });
-            NW.FindError(new float[2] {0.8f, 0.2f}); // Первое число - горизонтальная линия, второе число - вертикальная линия | >0,8 есть линия, <0.2 нету
+            //NW.FindError(new float[2] {0.8f, 0.2f}); // Первое число - горизонтальная линия, второе число - вертикальная линия | >0,8 есть линия, <0.2 нету
         }
 
         private void ShowNetworkButton(object sender, RoutedEventArgs e)

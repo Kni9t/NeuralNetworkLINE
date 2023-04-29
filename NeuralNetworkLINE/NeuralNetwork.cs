@@ -9,6 +9,7 @@ namespace NeuralNetworkLINE
 {
     internal class NeuralNetwork
     {
+        Random R = new Random();
         List<float[,]> Weight; // Список связей между слоями двумя слоями, где каждый элемент - это
         // Двумерный массив. Каждый элемент массива - это значение веса между парой нейронов W1[i, j] в двух соседних слоях, где i - это номер нейрона в первом слою, а j - номер нейрона во втором слою
         List<float[,]> Layers; // Список слоев нейронной сети, где каждый элемент списка это - 
@@ -35,7 +36,7 @@ namespace NeuralNetworkLINE
 
                 for (int i = 0; i < buf.GetLength(0); i++)
                     for (int j = 0; j < buf.GetLength(1); j++)
-                        buf[i, j] = 0.5f;
+                        buf[i, j] = ((float)R.Next(-5, 5) / 10f );
 
                 Weight.Add(buf);
             }
