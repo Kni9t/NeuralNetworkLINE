@@ -15,7 +15,7 @@ namespace NeuralNetworkLINE
         List<float[,]> Layers; // Список слоев нейронной сети, где каждый элемент списка это - 
         // Двумерный массив, с двумя столбцами, где первый это непосредственно значений нейрона, а второй это ошибка слоя нейрона
         // При этом первый элемент списка - всегда входной слой, а последний - выходной
-        float LearningRate = 0.1f;
+        float LearningRate = 0.3f;
         float FunctionActivation(float InputNumber) // Функция активации
         {
             return (float)(1 / (1 + Math.Pow(Math.E, -InputNumber)));
@@ -71,14 +71,14 @@ namespace NeuralNetworkLINE
                 Weight.Add(buf);
             }
         }
-        public void InPut(float[] InPutMass)
+        void InPut(float[] InPutMass)
         {
             for (int i = 0; i < InPutMass.Length; i++)
             {
                 Layers[0][i, 0] = InPutMass[i];
             }
         }
-        public void InPut(float[,] InPutMass)
+        void InPut(float[,] InPutMass)
         {
             int i = 0;
 
@@ -106,7 +106,6 @@ namespace NeuralNetworkLINE
 
             return ResultLayer;
         }
-
         float[,] ErrorBetween(float[,] FirstLayer, float[,] SecondLayer, float[,] LinksBetween)
         {
             // Возвращает новые значения ошибки нейронов для слоя из FirstLayer
@@ -123,7 +122,6 @@ namespace NeuralNetworkLINE
 
             return ResultErrorLayer;
         }
-
         public void FindError(float[] ExpectedResult)
         {
             // Ошибка выходного слоя
@@ -138,7 +136,7 @@ namespace NeuralNetworkLINE
                 Layers[i] = ErrorBetween(Layers[i], Layers[i+1], Weight[i]);
             }
         }
-        float[,] WeightСorrection(float[,] FirstLayer, float[,] SecondLayer, float[,] LinksBetween) // Подумать над формулой расчетов
+        float[,] WeightСorrection(float[,] FirstLayer, float[,] SecondLayer, float[,] LinksBetween)
         {
             float[,] NewLinksBetween = new float[LinksBetween.GetLength(0), LinksBetween.GetLength(1)];
 
@@ -154,7 +152,7 @@ namespace NeuralNetworkLINE
             }
             return NewLinksBetween;
         }
-        public void Correct(float[] ExpectedResult) // Тестить
+        public void Correct(float[] ExpectedResult)
         {
             FindError(ExpectedResult);
 
@@ -162,26 +160,6 @@ namespace NeuralNetworkLINE
             {
                 Weight[i] = WeightСorrection(Layers[i], Layers[i + 1], Weight[i]);
             }
-        }
-
-        public float[] DoIt() // Тестовая функция вывода результата
-        {
-            float[] Result = new float[Layers[Layers.Count - 1].GetLength(0)];
-
-            for (int i = 0; i < Weight.Count; i++)
-            {
-                for (int j = 0; j < Layers[i + 1].GetLength(0); j++)
-                {
-                    for (int g = 0; g < Layers[i].GetLength(0); g++)
-                    {
-                        Layers[i + 1] = LayerForward(Layers[i], Layers[i + 1], Weight[i]);
-                    }
-                }
-            }
-
-            for (int i = 0; i < Result.Length; i++)
-                Result[i] = Layers[Layers.Count - 1][i, 0];
-            return Result;
         }
         public void Loop(float[,] InPutMass, float[] ExpectedResult)
         {
@@ -199,6 +177,22 @@ namespace NeuralNetworkLINE
             }
 
             Correct(ExpectedResult);
+        }
+        public float[] Execute(float[,] InPutMass)
+        {
+            InPut(InPutMass);
+
+            for (int i = 0; i < Weight.Count; i++)
+            {
+                for (int j = 0; j < Layers[i + 1].GetLength(0); j++)
+                {
+                    for (int g = 0; g < Layers[i].GetLength(0); g++)
+                    {
+                        Layers[i + 1] = LayerForward(Layers[i], Layers[i + 1], Weight[i]);
+                    }
+                }
+            }
+            return GetResult();
         }
         public float[] GetResult()
         {

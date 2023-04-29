@@ -25,60 +25,131 @@ namespace NeuralNetworkLINE
             RG = new RectGrid(BaseCanvas, 4);
             NW = new NeuralNetwork();
         }
+        struct TestUnit
+        {
+            public float[,] TestMass;
+            public float[] ExpectedMass;
+            public void SetMass(float[,] bufMass)
+            {
+                TestMass = new float[bufMass.GetLength(0), bufMass.GetLength(1)];
+
+                for (int i = 0; i < bufMass.GetLength(0); i++)
+                    for (int j = 0; j < bufMass.GetLength(1); j++)
+                        TestMass[i, j] = bufMass[i, j];
+            }
+            public void SetExpected(float[] bufMass)
+            {
+                ExpectedMass = new float[bufMass.Length];
+
+                for (int i = 0; i < bufMass.Length; i++)
+                    ExpectedMass[i] = bufMass[i];
+            }
+        }
+
+        private void SetUp(object sender, RoutedEventArgs e)
+        {
+            List<TestUnit> TestList = new List<TestUnit>();
+            // Генерация тестового набора данных
+            for (int g = 0; g < 4; g++) // Тестовые горизонтальные линии
+            {
+                float[,] Buf = new float[4, 4];
+
+                for (int i = 0; i < 4; i++) 
+                {
+                    Buf[g, i] = 1;
+                }
+                TestUnit bufUnit = new TestUnit();
+
+                bufUnit.SetMass(Buf);
+                bufUnit.SetExpected(new float[2] { 0.8f, 0.2f });
+
+                TestList.Add(bufUnit);
+            }
+            for (int g = 0; g < 4; g++) // Тестовые вертикальные линии
+            {
+                float[,] Buf = new float[4, 4];
+
+                for (int i = 0; i < 4; i++)
+                {
+                    Buf[i, g] = 1;
+                }
+
+                TestUnit bufUnit = new TestUnit();
+
+                bufUnit.SetMass(Buf);
+                bufUnit.SetExpected(new float[2] { 0.2f, 0.8f });
+
+                TestList.Add(bufUnit);
+            }
+            for (int g = 0; g < 4; g++) // Две тестовых горизонтальных линий
+            {
+                float[,] Buf = new float[4, 4];
+
+                for (int i = 0; i < 4; i++)
+                {
+                    Buf[g, i] = 1;
+                    if ((g + 2) < 3) Buf[g + 2, i] = 1;
+                }
+                TestUnit bufUnit = new TestUnit();
+
+                bufUnit.SetMass(Buf);
+                bufUnit.SetExpected(new float[2] { 0.8f, 0.2f });
+
+                TestList.Add(bufUnit);
+            }
+            for (int g = 0; g < 4; g++) // Две тестовых вертикальных линий
+            {
+                float[,] Buf = new float[4, 4];
+
+                for (int i = 0; i < 4; i++)
+                {
+                    Buf[i, g] = 1;
+                    if ((g + 2) < 3) Buf[i, g + 2] = 1;
+                }
+
+                TestUnit bufUnit = new TestUnit();
+
+                bufUnit.SetMass(Buf);
+                bufUnit.SetExpected(new float[2] { 0.2f, 0.8f });
+
+                TestList.Add(bufUnit);
+            }
+            for (int g = 0; g < 4; g++) // Горизонтальная линия, вместе с вертикальной
+            {
+                float[,] Buf = new float[4, 4];
+
+                for (int i = 0; i < 4; i++)
+                {
+                    Buf[i, g] = 1;
+                    Buf[g, i] = 1;
+                }
+
+                TestUnit bufUnit = new TestUnit();
+
+                bufUnit.SetMass(Buf);
+                bufUnit.SetExpected(new float[2] { 0.8f, 0.8f });
+
+                TestList.Add(bufUnit);
+            }
+            for (int g = 0; g < 3; g++) // Несколько запросов без линий
+            {
+                float[,] Buf = new float[4, 4];
+
+                TestUnit bufUnit = new TestUnit();
+
+                bufUnit.SetMass(Buf);
+                bufUnit.SetExpected(new float[2] { 0.2f, 0.2f });
+
+                TestList.Add(bufUnit);
+            }
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //NW.InPut(RG.GetGridStateFloat());
-            float[,] f1 = new float[4, 4]
-            {
-                {1,1,1,1 },
-                {0,0,0,0 },
-                {0,0,0,0 },
-                {0,0,0,0 }
-            };
-            float[] e1 = new float[2] { 0.8f, 0.2f };
+            float[] Result = NW.Execute(RG.GetGridStateFloat());
+            BaseLabel.Content = Result[0] + " " + Result[1];
 
-            float[,] f2 = new float[4, 4]
-            {
-                {1,0,0,0 },
-                {1,0,0,0 },
-                {1,0,0,0 },
-                {1,0,0,0 }
-            };
-            float[] e2 = new float[2] { 0.2f, 0.8f };
-
-            float[,] f3 = new float[4, 4]
-            {
-                {1,1,1,1 },
-                {1,0,0,0 },
-                {1,0,0,0 },
-                {1,0,0,0 }
-            };
-            float[] e3 = new float[2] { 0.8f, 0.8f };
-
-            float[,] f4 = new float[4, 4]
-            {
-                {1,1,1,1 },
-                {0,0,0,0 },
-                {1,1,1,1 },
-                {0,0,0,0 }
-            };
-            float[] e4 = new float[2] { 0.8f, 0.2f };
-
-            NW.Loop(f1, e1);
-            Show(NW.GetResult());
-
-            NW.Loop(f2, e2);
-            Show(NW.GetResult());
-
-            NW.Loop(f3, e3);
-            Show(NW.GetResult());
-
-            NW.Loop(f4, e4);
-            Show(NW.GetResult());
-
-
-
+            //NW.Loop(f1, e1);
             //NW.Correct(new float[2] { 0.8f, 0.2f }); // Первое число - горизонтальная линия, второе число - вертикальная линия | >0,8 есть линия, <0.2 нету
         }
 
@@ -91,8 +162,8 @@ namespace NeuralNetworkLINE
 
         private void ShowNetworkButton(object sender, RoutedEventArgs e)
         {
-            // Переделать под двумерный массив
-            /*NetworkWindow networkWindow = new NetworkWindow();
+            /*
+            NetworkWindow networkWindow = new NetworkWindow();
             networkWindow.Owner = this;
 
             float[] buf= RG.GetGridStateFloat();
@@ -168,7 +239,8 @@ namespace NeuralNetworkLINE
                 networkWindow.NetworkCanvas.Children.Add(G);
             }
 
-            networkWindow.Show();*/
+            networkWindow.Show();
+            */
         }
     }
 }
