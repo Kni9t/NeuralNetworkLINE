@@ -28,16 +28,65 @@ namespace NeuralNetworkLINE
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            NW.InPut(RG.GetGridStateFloat());
+            //NW.InPut(RG.GetGridStateFloat());
+            float[,] f1 = new float[4, 4]
+            {
+                {1,1,1,1 },
+                {0,0,0,0 },
+                {0,0,0,0 },
+                {0,0,0,0 }
+            };
+            float[] e1 = new float[2] { 0.8f, 0.2f };
 
-            float[] result = NW.DoIt();
+            float[,] f2 = new float[4, 4]
+            {
+                {1,0,0,0 },
+                {1,0,0,0 },
+                {1,0,0,0 },
+                {1,0,0,0 }
+            };
+            float[] e2 = new float[2] { 0.2f, 0.8f };
 
+            float[,] f3 = new float[4, 4]
+            {
+                {1,1,1,1 },
+                {1,0,0,0 },
+                {1,0,0,0 },
+                {1,0,0,0 }
+            };
+            float[] e3 = new float[2] { 0.8f, 0.8f };
+
+            float[,] f4 = new float[4, 4]
+            {
+                {1,1,1,1 },
+                {0,0,0,0 },
+                {1,1,1,1 },
+                {0,0,0,0 }
+            };
+            float[] e4 = new float[2] { 0.8f, 0.2f };
+
+            NW.Loop(f1, e1);
+            Show(NW.GetResult());
+
+            NW.Loop(f2, e2);
+            Show(NW.GetResult());
+
+            NW.Loop(f3, e3);
+            Show(NW.GetResult());
+
+            NW.Loop(f4, e4);
+            Show(NW.GetResult());
+
+
+
+            //NW.Correct(new float[2] { 0.8f, 0.2f }); // Первое число - горизонтальная линия, второе число - вертикальная линия | >0,8 есть линия, <0.2 нету
+        }
+
+        void Show(float[] Mass)
+        {
             string buf = "";
-            foreach (float f in result) buf += f + " ";
+            foreach (float f in Mass) buf += f + " ";
             MessageBox.Show(buf);
-
-            NW.Correct(new float[2] { 0.8f, 0.2f });
-            //NW.FindError(new float[2] {0.8f, 0.2f}); // Первое число - горизонтальная линия, второе число - вертикальная линия | >0,8 есть линия, <0.2 нету
         }
 
         private void ShowNetworkButton(object sender, RoutedEventArgs e)

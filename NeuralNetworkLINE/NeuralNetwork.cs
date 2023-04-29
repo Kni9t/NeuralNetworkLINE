@@ -15,7 +15,7 @@ namespace NeuralNetworkLINE
         List<float[,]> Layers; // Список слоев нейронной сети, где каждый элемент списка это - 
         // Двумерный массив, с двумя столбцами, где первый это непосредственно значений нейрона, а второй это ошибка слоя нейрона
         // При этом первый элемент списка - всегда входной слой, а последний - выходной
-        float LearningRate = 0.3f;
+        float LearningRate = 0.1f;
         public NeuralNetwork(int CountInPut = 16, int CountOutPut = 2, int CountHiddenLayers = 1, int CountHiddenNeural = 4)
         {
             // Создание слоев нейронов
@@ -36,7 +36,7 @@ namespace NeuralNetworkLINE
 
                 for (int i = 0; i < buf.GetLength(0); i++)
                     for (int j = 0; j < buf.GetLength(1); j++)
-                        buf[i, j] = ((float)R.Next(-5, 5) / 10f );
+                        buf[i, j] = ((float)R.Next(-30, 30) / 100f );
 
                 Weight.Add(buf);
             }
@@ -56,13 +56,16 @@ namespace NeuralNetworkLINE
             // Создание весов между слоями
             Weight = new List<float[,]>();
 
-            for (int i = 0; i < Weight.Count - 1; i++)
-                Weight.Add(new float[Weight[i].GetLength(0), Weight[i + 1].GetLength(0)]);
+            for (int l = 0; l < Layers.Count - 1; l++)
+            {
+                float[,] buf = new float[Layers[l].GetLength(0), Layers[l + 1].GetLength(0)];
 
-            foreach (float[,] weight in Weight)
-                for (int i = 0; i < weight.GetLength(0); i++)
-                    for (int j = 0; j < weight.GetLength(1); j++)
-                        weight[i, j] = 0.5f; // Задание изначального веса
+                for (int i = 0; i < buf.GetLength(0); i++)
+                    for (int j = 0; j < buf.GetLength(1); j++)
+                        buf[i, j] = ((float)R.Next(-5, 5) / 10f);
+
+                Weight.Add(buf);
+            }
         }
         public void InPut(float[] InPutMass)
         {
@@ -170,6 +173,31 @@ namespace NeuralNetworkLINE
                     }
                 }
             }
+
+            for (int i = 0; i < Result.Length; i++)
+                Result[i] = Layers[Layers.Count - 1][i, 0];
+            return Result;
+        }
+        public void Loop(float[,] InPutMass, float[] ExpectedResult)
+        {
+            InPut(InPutMass);
+
+            for (int i = 0; i < Weight.Count; i++)
+            {
+                for (int j = 0; j < Layers[i + 1].GetLength(0); j++)
+                {
+                    for (int g = 0; g < Layers[i].GetLength(0); g++)
+                    {
+                        Layers[i + 1] = LayerForward(Layers[i], Layers[i + 1], Weight[i]);
+                    }
+                }
+            }
+
+            Correct(ExpectedResult);
+        }
+        public float[] GetResult()
+        {
+            float[] Result = new float[Layers[Layers.Count - 1].GetLength(0)];
 
             for (int i = 0; i < Result.Length; i++)
                 Result[i] = Layers[Layers.Count - 1][i, 0];
