@@ -54,7 +54,7 @@ namespace NeuralNetworkLINE
             {
                 float[,] Buf = new float[4, 4];
 
-                for (int i = 0; i < 4; i++) 
+                for (int i = 0; i < 4; i++)
                 {
                     Buf[g, i] = 1;
                 }
@@ -142,12 +142,31 @@ namespace NeuralNetworkLINE
 
                 TestList.Add(bufUnit);
             }
+
+            string res = "";
+
+            for (int l = 0; l < 1000; l++) // Число прогонов по тестовому набору
+            {
+                if (l % 100 == 0) for (int i = TestList.Count - 1; i >= 1; i--) // Перемешивание тестового набора
+                {
+                    int j = new Random().Next(i + 1);
+                    var temp = TestList[j];
+                    TestList[j] = TestList[i];
+                    TestList[i] = temp;
+                }
+
+                foreach (TestUnit TU in TestList)
+                    NW.Loop(TU.TestMass, TU.ExpectedMass);
+                if (l % 100 == 0)  res += "Итерация: " + l + "\nЗначение ошибки: " + NW.GetSummError().ToString("F") + "\n";
+            }
+            MessageBox.Show("Обучение завершено!");
+            MessageBox.Show(res);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             float[] Result = NW.Execute(RG.GetGridStateFloat());
-            BaseLabel.Content = Result[0] + " " + Result[1];
+            BaseLabel.Content = Result[0].ToString("F") + " " + Result[1].ToString("F");
 
             //NW.Loop(f1, e1);
             //NW.Correct(new float[2] { 0.8f, 0.2f }); // Первое число - горизонтальная линия, второе число - вертикальная линия | >0,8 есть линия, <0.2 нету

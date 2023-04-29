@@ -122,7 +122,7 @@ namespace NeuralNetworkLINE
 
             return ResultErrorLayer;
         }
-        public void FindError(float[] ExpectedResult)
+        void FindError(float[] ExpectedResult)
         {
             // Ошибка выходного слоя
             for (int i = 0; i < Layers[Layers.Count - 1].GetLength(0); i++)
@@ -152,7 +152,7 @@ namespace NeuralNetworkLINE
             }
             return NewLinksBetween;
         }
-        public void Correct(float[] ExpectedResult)
+        void Correct(float[] ExpectedResult)
         {
             FindError(ExpectedResult);
 
@@ -200,6 +200,20 @@ namespace NeuralNetworkLINE
 
             for (int i = 0; i < Result.Length; i++)
                 Result[i] = Layers[Layers.Count - 1][i, 0];
+            return Result;
+        }
+        public float GetSummError()
+        {
+            float Result = 0;
+
+            foreach (float[,] f in Layers)
+            {
+                for (int i = 0; i < f.GetLength(1); i++)
+                {
+                    Result += f[i, 1];
+                }
+            }
+
             return Result;
         }
 
