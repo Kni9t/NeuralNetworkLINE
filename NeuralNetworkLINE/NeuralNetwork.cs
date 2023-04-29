@@ -16,6 +16,10 @@ namespace NeuralNetworkLINE
         // Двумерный массив, с двумя столбцами, где первый это непосредственно значений нейрона, а второй это ошибка слоя нейрона
         // При этом первый элемент списка - всегда входной слой, а последний - выходной
         float LearningRate = 0.1f;
+        float FunctionActivation(float InputNumber) // Функция активации
+        {
+            return (float)(1 / (1 + Math.Pow(Math.E, -InputNumber)));
+        }
         public NeuralNetwork(int CountInPut = 16, int CountOutPut = 2, int CountHiddenLayers = 1, int CountHiddenNeural = 4)
         {
             // Создание слоев нейронов
@@ -97,6 +101,7 @@ namespace NeuralNetworkLINE
 
                 for (int j = 0; j < FirstLayer.GetLength(0); j++)
                     ResultLayer[i, 0] += FirstLayer[j, 0] * LinksBetween[j, i];
+                ResultLayer[i, 0] = FunctionActivation(ResultLayer[i, 0]); // Использование функции активации
             }
 
             return ResultLayer;
