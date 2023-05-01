@@ -147,7 +147,8 @@ namespace NeuralNetworkLINE
 
             for (int l = 0; l < 1000; l++) // Число прогонов по тестовому набору
             {
-                if (l % 100 == 0) for (int i = TestList.Count - 1; i >= 1; i--) // Перемешивание тестового набора
+                if (l % 100 == 0) 
+                    for (int i = TestList.Count - 1; i >= 1; i--) // Перемешивание тестового набора
                 {
                     int j = new Random().Next(i + 1);
                     var temp = TestList[j];
@@ -157,10 +158,10 @@ namespace NeuralNetworkLINE
 
                 foreach (TestUnit TU in TestList)
                     NW.Loop(TU.TestMass, TU.ExpectedMass);
-                if (l % 100 == 0)  res += "Итерация: " + l + "\nЗначение ошибки: " + NW.GetSummError().ToString("F") + "\n";
+                //if (l % 100 == 0)  res += "Итерация: " + l + "\nЗначение ошибки: " + NW.GetSummError().ToString("F") + "\n";
             }
             MessageBox.Show("Обучение завершено!");
-            MessageBox.Show(res);
+            //MessageBox.Show(res);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
